@@ -1,0 +1,15 @@
+#!/bin/bash
+
+set -e  # Exit immediately if a command exits with a non-zero status.
+set -x  # All executed commands are printed to the terminal
+
+cp /tmp/scripts/boot /usr/local/boot
+
+aptitude update ; aptitude install -R -y python3-pip
+
+pip3 install maubot
+wget -O "/usr/local/example-config.yaml" "https://raw.githubusercontent.com/maubot/maubot/master/docker/example-config.yaml"
+sed -i '/override_resource_path/c\    override_resource_path: false' /usr/local/example-config.yaml
+
+apt-get -y autoremove ; aptitude -y autoclean ; apt-get -y autoclean
+rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /root/.aptitude /root/.cache /root/.wget-hsts
